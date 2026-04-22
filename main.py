@@ -40,17 +40,41 @@ CREATE TABLE books (
 # 5. Создание таблицы выдачи (Borrowing)
 cursor.execute("""
 CREATE TABLE borrowings (
-    borrow_id INTEGER PRIMARY KEY AUTOINCREMENT,
     reader_id INTEGER NOT NULL,
     book_id INTEGER NOT NULL,
     issue_date TEXT NOT NULL,
     return_deadline TEXT,
     deposit_amount REAL,
-    status TEXT CHECK(status IN ('new', 'shipped', 'delivered', 'cancelled')), -- Сохранено по структуре (взято, в пути, возвращено, отменено)
     FOREIGN KEY (reader_id) REFERENCES readers(reader_id) ON DELETE CASCADE,
     FOREIGN KEY (book_id) REFERENCES books(book_id) ON DELETE SET NULL
 )
 """)
+books_array = [
+('Мастер и Маргарита', 'Михаил Булгаков', 150.0, 5),
+    ('1984', 'Джордж Оруэлл', 120.0, 3),
+    ('Преступление и наказание', 'Фёдор Достоевский', 100.0, 7),
+    ('Алхимик', 'Пауло Коэльо', 90.0, 10),
+    ('Маленький принц', 'Антуан де Сент-Экзюпери', 80.0, 12),
+    ('Ведьмак: Последнее желание', 'Анджей Сапковский', 200.0, 4),
+    ('Атлант расправил плечи', 'Айн Рэнд', 250.0, 2)
+]
+
+cursor.executemany("""
+INSERT INTO users (title,author,rental_price,copies_available) VALUES (?, ?, ?, ?)
+""", books_array)
+
+print("Введите id пользователя: ")
+reader_id = int(input())
+print("Введите id книги: ")
+book_id = int(input())
+print("Введите id пользователя: ")
+reader_id = int(input())
+print("Введите id книги: ")
+book_id = int(input())
+
+cursor.execute("""
+INSERT INTO users (reader_id, book_id,) VALUES (?, ?)
+""", (reader_id, book_id))
 
 # 6. Данные читателей
 readers_data = [
@@ -71,7 +95,8 @@ readers_data = [
     ("Николай Григорьев", "nikolay.grigoriev@gmail.com", "BC-015", "Триллер", "2024-09-20")
 ]
 
-# 7. Вставка данных 
+
+# 7. Вставка данных
 cursor.executemany("""
 INSERT INTO readers (full_name, email, library_card, preferred_genre, registered_at) 
 VALUES (?, ?, ?, ?, ?)
