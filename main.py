@@ -71,7 +71,7 @@ readers_data = [
     ("Николай Григорьев", "nikolay.grigoriev@gmail.com", "BC-015", "Триллер", "2024-09-20")
 ]
 
-# 7. Вставка данных (исправлено на executemany для работы со списком)
+# 7. Вставка данных 
 cursor.executemany("""
 INSERT INTO readers (full_name, email, library_card, preferred_genre, registered_at) 
 VALUES (?, ?, ?, ?, ?)
